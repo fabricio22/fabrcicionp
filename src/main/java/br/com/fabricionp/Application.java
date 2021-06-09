@@ -1,6 +1,5 @@
 package br.com.fabricionp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.com.fabricionp.domain.Categoria;
 import br.com.fabricionp.domain.Cidade;
+import br.com.fabricionp.domain.Cliente;
+import br.com.fabricionp.domain.Endereco;
 import br.com.fabricionp.domain.Estado;
 import br.com.fabricionp.domain.Produto;
+import br.com.fabricionp.domain.enums.TipoCliente;
 import br.com.fabricionp.repositories.CategoriaRepository;
 import br.com.fabricionp.repositories.CidadeRepository;
+import br.com.fabricionp.repositories.ClienteRepository;
+import br.com.fabricionp.repositories.EnderecoRepository;
 import br.com.fabricionp.repositories.EstadoRepositoy;
 import br.com.fabricionp.repositories.ProdutoRepository;
 
@@ -31,6 +35,13 @@ public class Application implements CommandLineRunner {
 
 	@Autowired
 	private EstadoRepositoy estadoRepositoy;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -69,6 +80,16 @@ public class Application implements CommandLineRunner {
 
 		estadoRepositoy.saveAll(Arrays.asList(estado, estado2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
-
+		
+		Cliente cli1 = new Cliente(null, "Fabrício", "fabricio@email.com.br", "35185951899", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("123456789","647839304"));
+		
+		Endereco e1 = new Endereco(null, "Rua Flores", "34", "Apto 303", "Jardim", "08823130", cli1, c1);
+		Endereco e2 = new Endereco(null, "Rua Matos", "002", null, "Amazonia", "4935303", cli1, c2);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		
+		clienteRepository.save(cli1);
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 	}
 }
