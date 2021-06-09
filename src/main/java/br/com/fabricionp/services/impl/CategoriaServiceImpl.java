@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.fabricionp.domain.Categoria;
 import br.com.fabricionp.repositories.CategoriaRepository;
 import br.com.fabricionp.services.CategoriaService;
+import br.com.fabricionp.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
@@ -20,7 +21,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 		Optional<Categoria> optionalCategoria = categoriaRepository.findById(id);
 
 		if (!optionalCategoria.isPresent()) {
-			throw new Exception("Categoria não localizada com o id " + id + " informado!");
+			throw new ObjectNotFoundException("Categoria não localizada com o id " + id + " informado! tipo: " + Categoria.class.getName());
 		}
 
 		return optionalCategoria.get();
